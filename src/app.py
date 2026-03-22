@@ -57,17 +57,26 @@ usuarios = [
   {
     "id": 1,
     "nombre": "Juan Pérez",
-    "email": "juan.perez@example.com"
+    "email": "juan.perez@example.com",
+    "estado": "activo"
   },
   {
     "id": 2,
     "nombre": "María García",
-    "email": "maria.garcia@example.com"
+    "email": "maria.garcia@example.com",
+    "estado": "activo"
   },
   {
     "id": 3,
     "nombre": "Carlos López",
-    "email": "carlos.lopez@example.com"
+    "email": "carlos.lopez@example.com",
+    "estado": "activo"
+  },
+  {
+    "id": 4,
+    "nombre": "Miguel Diaz",
+    "email": "miguel.diaz@example.com",
+    "estado": "inactivo"
   }
 ]
 
@@ -101,6 +110,16 @@ listado_estados = [
   }
 ]
 
+listado_estados_usuarios = [
+  {
+    "id": 1,
+    "estado": "activo"
+  },
+  {
+    "id": 1,
+    "estado": "inactivo"
+  }
+]
 
 #################################################################
 #           Metodos GET para la lista de tareas                 #
@@ -224,30 +243,119 @@ def actualiza_estado(id):
             
     return jsonify({"error": f"No se encontró ninguna tarea con el ID {id}"}), 404
         
+#################################################################
+#          Metodos DELETE para la lista de tareas               #
+#################################################################          
         
+@app.route('/api/eliminar_tarea/<int:id>', methods=['DELETE'])
+def eliminar_tarea(id):
+    for tarea in to_do_list:
+        if tarea.get('id') == id:
+            to_do_list.remove(tarea)
+            return jsonify({"mensaje": f"Tarea {id} eliminada correctamente"}), 200
+            
+    return jsonify({"error": f"No se encontró ninguna tarea con el ID {id}"}), 404       
         
-        
-        
-        
-        
-        
-        
-        
-        
-           
+
+#################################################################
+#           Metodos GET para usuarios                           #
+#################################################################
+
 @app.route('/api/usuarios', methods=['GET'])
-def get_usuarios():
-    return jsonify(usuarios), 200
+def listado_usuarios():
+  return jsonify(usuarios), 200
 
+@app.route('/api/usuario_id/<int:id>', methods=['GET'])
+def listado_usuario_id(id):
+  for usuario in usuarios:
+    if usuario['id'] == id:
+      return jsonify(usuario), 200
+  return jsonify({"error" : "el usuario no existe"})
 
-@app.route('/registro_to_do')
-def registro_to_do():
-    return "<p>Registro de baño</p>"
+@app.route('/api/usuario_nombre/<string:nombre>', methods=['GET'])
+def listado_usuario_nombre(nombre):
+    nombre_buscado = nombre.lower()
+    
+    for usuario in usuarios:
+        nombre_guardado = usuario.get('nombre', '').lower()
 
-@app.route('/registro_usuario')
-def registro_usuario():
-    return "<p>Registro de usuario</p>"
+        if nombre_guardado == nombre_buscado:
+            return jsonify(usuario), 200
 
+    return jsonify({"error": "El usuario no existe"}), 404
+
+@app.route('/api/usuario_estado/<string:estado>', methods=['GET'])
+def listado_usuario_xestado(estado):
+    usuarios_filtrados = []
+    estado_buscado = estado.lower()
+    
+    for usuario in usuarios:
+        if usuario.get('estado', '').lower() == estado_buscado:
+            usuarios_filtrados.append(usuario)
+            
+    if not usuarios_filtrados:
+        return jsonify({"error": "No hay usuarios con ese estado o el estado no está registrado"}), 404
+        
+    return jsonify(usuarios_filtrados), 200
+
+#################################################################
+#           Metodos POST para usuarios                          #
+#################################################################
+
+@app.route('/api/usuarios', methods=['POST'])
+def crear_usuario():
+    datos_cliente = request.get_json()
+    
+    if not datos_cliente or not datos_cliente.get('nombre') or not datos_cliente.get('email'):
+        return jsonify({"error": "Faltan datos requeridos (nombre, email)"}), 400
+
+    nuevo_id = len(usuarios) + 1
+    
+    nuevo_usuario = {
+        "id": nuevo_id,
+        "nombre": datos_cliente.get('nombre'),
+        "email": datos_cliente.get('email'),
+        "estado": "activo"
+    }
+    
+    usuarios.append(nuevo_usuario)
+    return jsonify(nuevo_usuario), 201
+
+#################################################################
+#           Metodos PUT para usuarios                           #
+#################################################################         
+
+@app.route('/api/usuarios/<int:id>', methods=['PUT'])
+def actualizar_usuario(id):
+    datos_cliente = request.get_json()
+    
+    if not datos_cliente:
+        return jsonify({"error": "Debes enviar los datos a actualizar en el JSON"}), 400
+
+    for usuario in usuarios:
+        if usuario.get('id') == id:
+            if 'nombre' in datos_cliente:
+                usuario['nombre'] = datos_cliente.get('nombre')
+                
+            if 'email' in datos_cliente:
+                usuario['email'] = datos_cliente.get('email')
+                
+            if 'estado' in datos_cliente:
+                usuario['estado'] = datos_cliente.get('estado').lower()
+                
+            return jsonify({
+                "mensaje": "Usuario actualizado correctamente",
+                "usuario": usuario
+            }), 200
+            
+    return jsonify({"error": f"No se encontró ningún usuario con el ID {id}"}), 404
+
+#################################################################
+#          Metodos DELETE para usuarios                         #
+#################################################################              
+
+# No se usa el estado DELETE para este escenario ya que no 
+# se espera poder eliminar los usuarios solo modificar
 
 
 if __name__ == '__main__':
