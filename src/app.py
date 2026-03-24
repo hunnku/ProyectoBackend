@@ -1,8 +1,6 @@
 from datetime import datetime
 from flask import Flask, jsonify, request, render_template
-from flask.views import MethodView
-from flask_smorest import Api, Blueprint, abort
-from marshmallow import Schema, fields
+
 
 
 app = Flask(__name__)
@@ -199,7 +197,14 @@ def creacion_tarea():
     
     if not titulo_es_valido:
         return jsonify({"error": "Título no válido"}), 400
-
+    
+    fecha_solicitada = nuevo_registro.get('fecha')
+    
+    hora_ocupada = any(i.get('fecha') == fecha_solicitada for i in to_do_list)
+    
+    if hora_ocupada:
+      return jsonify({"erro" : f"Lo sentimos, ya existe una reserva a las {fecha_solicitada}"}), 409
+    
     nuevo_registro['estado'] = "pendiente"
     nuevo_registro['fecha_creacion'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
