@@ -15,7 +15,7 @@ to_do_list = [
     "estado": "pendiente",
     "fecha": "2026-03-30 10:00:00",
     "id_usuario": 1,
-    "fecha_creacion": "2026-03-25 09:00:00" 
+    "fecha_creacion": "2026-03-25 09:00:00"
   },
   {
     "id": 2,

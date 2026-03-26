@@ -223,20 +223,17 @@ class TestUsuariosAPI(unittest.TestCase):
 
 
     def test_listado_usuario(self):
-        to_do_list.extend([
-            {"id": 1, "titulo": "Baño Premium", "estado": "pendiente", "fecha": "2026-03-30 10:00:00", "id_usuario": 1, "fecha_creacion": "2026-03-25 09:00:00"},
-            {"id": 2, "titulo": "Baño Premium", "estado": "cancelado", "fecha": "2026-03-30 09:00:00", "id_usuario": 2, "fecha_creacion": "2026-03-30 08:00:00"},
-            {"id": 3, "titulo": "Grooming Profesional", "estado": "completado", "fecha": "2026-03-30 13:00:00", "id_usuario": 2, "fecha_creacion": "2026-03-27 09:00:00"},
-            {"id": 4, "titulo": "Grooming Profesional", "estado": "pendiente", "fecha": "2026-10-30 15:00:00", "id_usuario": 1, "fecha_creacion": "2026-09-28 09:00:00"},
-            {"id": 5, "titulo": "Grooming Profesional", "estado": "completado", "fecha": "2026-10-30 12:00:00", "id_usuario": 3, "fecha_creacion": "2026-09-29 09:00:00"}
-        ])
+        usuarios.extend([{"id": 1, "nombre": "Juan Pérez", "email": "juan.perez@example.com", "estado": "activo"},
+                         {"id": 2, "nombre": "María García", "email": "maria.garcia@example.com", "estado": "activo"},
+                         {"id": 3, "nombre": "Carlos López", "email": "carlos.lopez@example.com", "estado": "activo"},
+                         {"id": 4, "nombre": "Miguel Diaz", "email": "miguel.diaz@example.com", "estado": "inactivo"}])
         
         respuesta = self.app.get('/api/usuario_id/1')
         
         json_respuesta = json.loads(respuesta.data)
         
         self.assertEqual(respuesta.status_code, 200)
-        self.assertEqual(json_respuesta['id'], 1)  
+        self.assertEqual(json_respuesta['id'], 1)
 
 if __name__ == '__main__':
     unittest.main()
