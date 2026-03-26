@@ -63,8 +63,8 @@ A continuación se detalla el estado de cada uno de los puntos solicitados, basa
 
 ## 4. Documentación y Video
 
-- **[PENDIENTE] Crear archivo CI_REPORT.md:**
-  - El archivo `CI_REPORT.md` no existe en el proyecto.
+- **[LISTO] Crear archivo CI_REPORT.md:**
+  - Se ha creado el archivo `CI_REPORT.md` con una plantilla que detalla el pipeline. El usuario debe completar la URL del badge de estado.
 
 - **[PENDIENTE] Grabar video demo (8-10 minutos):**
   - Tarea externa al repositorio.
