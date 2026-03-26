@@ -50,8 +50,8 @@ A continuación se detalla el estado de cada uno de los puntos solicitados, basa
 - **[PENDIENTE] Implementar verificación de estándares de código (Pylint):**
   - La dependencia `pylint` no está en `requirements.txt` y no hay archivos de configuración de linter en el proyecto.
 
-- **[PENDiente] Configurar análisis estático con SonarCloud:**
-  - No se encontraron archivos de configuración para SonarCloud (ej. `sonar-project.properties`).
+- **[LISTO] Configurar análisis estático con SonarCloud:**
+  - Se ha creado el archivo `sonar-project.properties`. Es necesario que el usuario complete los valores de `sonar.projectKey` y `sonar.organization`.
 
 - **[LISTO] Automatizar generación de reporte HTML de cobertura:**
   - La existencia de la carpeta `htmlcov` confirma que el reporte HTML se ha generado.
