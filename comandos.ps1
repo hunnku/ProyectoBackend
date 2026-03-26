@@ -26,6 +26,9 @@ switch ($palabra) {
     "test" {
         python -m unittest discover -s "$scriptDir\test"
     }
+    "html" {
+        coverage run -m unittest discover -s test;coverage report -m ;Remove-Item .\htmlcov\ -Recurse -Force -ErrorAction SilentlyContinue; Start-Sleep -Seconds 5; coverage html
+    }
     default {
         Write-Output "opcion no valida"
     }

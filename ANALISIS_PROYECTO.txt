@@ -1,115 +1,70 @@
-# Análisis del Proyecto y Pasos a Seguir
+# Análisis del Estado del Proyecto
 
-A continuación se detallan los requisitos que no se cumplen actualmente en el proyecto y las acciones recomendadas para completarlos.
-
----
-
-### 1. Configuración Inicial
-
-*   **Estado:** Parcialmente completado.
-*   **Comentarios:** Tienes una buena estructura de carpetas y un servicio web básico con Flask. Sin embargo, faltan dependencias clave en tu archivo `requirements.txt`.
-*   **Acciones:**
-    1.  **Añadir dependencias de desarrollo:** Agrega las herramientas para pruebas, cobertura y calidad de código a tu `requirements.txt`.
-        ```
-        # requirements.txt
-        
-        # Dependencias de la aplicación
-        Flask==3.1.3
-        # ... (otras dependencias que ya tienes) ...
-
-        # Dependencias de desarrollo
-        pytest
-        coverage
-        pylint
-        ```
-    2.  **Instalar dependencias:** No olvides instalar las nuevas librerías en tu entorno virtual con `pip install -r requirements.txt`.
+A continuación se detalla el estado de cada uno de los puntos solicitados, basado en la estructura de carpetas y archivos actuales del proyecto.
 
 ---
 
-### 2. Implementación de Pruebas
+## 1. Configuración Inicial
 
-*   **Estado:** No iniciado.
-*   **Comentarios:** La carpeta `/test` está vacía. Este es un punto crítico a desarrollar.
-*   **Acciones:**
-    1.  **Crear Pruebas Unitarias (Mínimo 10):** Debes crear archivos de prueba (ej. `test/test_app.py`) y escribir pruebas para las funciones y lógica de negocio en `src/app.py`. Usa `pytest` para esto.
-        *   **Ejemplo de prueba unitaria:** Probar la lógica de creación de un usuario.
-    2.  **Crear Pruebas de Integración (Mínimo 5):** En el mismo archivo de pruebas, puedes probar los endpoints de tu API para asegurar que responden correctamente.
-        *   **Ejemplo de prueba de integración:** Realizar una petición `GET` al endpoint `/api/usuarios` y verificar que el código de estado sea 200 y que la respuesta sea un JSON válido.
-    3.  **Aplicar TDD (Test-Driven Development):** Para dos nuevas funcionalidades, escribe primero las pruebas que fallen y luego el código que las haga pasar. Por ejemplo, podrías añadir un endpoint para archivar tareas en lugar de eliminarlas.
-    4.  **Configurar Cobertura de Código:**
-        *   Ejecuta tus pruebas con el comando: `coverage run -m pytest`.
-        *   Genera un informe en la consola con: `coverage report`.
-        *   Para configurar el umbral del 80%, crea un archivo `.coveragerc` en la raíz de tu proyecto.
-            ```ini
-            ; .coveragerc
-            [report]
-            fail_under = 80
-            show_missing = True
-            
-            [run]
-            branch = True
-            ```
+- **[LISTO] Crear repositorio GitHub con .gitignore para Node.js/Python:**
+  - Se detectó un repositorio de Git (carpeta `.git`) y un archivo `.gitignore`.
+
+- **[LISTO] Inicializar proyecto con estructura de carpetas: /src, /tests, /docs, /config:**
+  - Las carpetas `src`, `test` (equivalente a `tests`), `docs`, y `config` existen en el proyecto.
+
+- **[LISTO] Crear servicio web REST simple con 3 endpoints (CRUD básico) usando Flask:**
+  - El archivo `src/app.py` contiene una aplicación Flask con múltiples endpoints que implementan un CRUD completo para tareas (`to_do_list`) y usuarios.
+
+- **[LISTO] Configurar requirements.txt con dependencias y scripts:**
+  - El archivo `requirements.txt` existe y declara las dependencias del proyecto, incluyendo Flask.
 
 ---
 
-### 3. Pipeline CI/CD con GitHub Actions
+## 2. Implementación de Pruebas
 
-*   **Estado:** No iniciado.
-*   **Comentarios:** No existe un flujo de trabajo de GitHub Actions.
-*   **Acciones:**
-    1.  **Crear el workflow:** Crea la ruta de carpetas `.github/workflows/` en la raíz de tu proyecto.
-    2.  **Definir el archivo `ci.yml`:** Dentro de `workflows`, crea un archivo llamado `ci.yml` con los siguientes stages:
-        ```yaml
-        # .github/workflows/ci.yml
-        name: CI Pipeline
-        
-        on: [push, pull_request]
-        
-        jobs:
-          build:
-            runs-on: ubuntu-latest
-            
-            steps:
-            - name: Checkout code
-              uses: actions/checkout@v3
-              
-            - name: Set up Python
-              uses: actions/setup-python@v4
-              with:
-                python-version: '3.10' 
-            
-            - name: Install dependencies
-              run: |
-                python -m pip install --upgrade pip
-                pip install -r requirements.txt
-                
-            - name: Lint with Pylint
-              run: |
-                pylint src/ --fail-under=8.0
-                
-            - name: Test with Pytest and generate coverage
-              run: |
-                coverage run -m pytest
-                coverage report --fail-under=80
-                coverage html
-            
-            - name: Archive code coverage results
-              uses: actions/upload-artifact@v3
-              with:
-                name: coverage-report
-                path: htmlcov
-        ```
-    3. **Análisis Estático con SonarCloud:** Esto requiere configuración adicional. Deberás crear una cuenta en SonarCloud, vincularla a tu repositorio de GitHub y añadir los secrets `SONAR_TOKEN` a tu repositorio para que el workflow de Actions pueda enviar el análisis.
+- **[LISTO] Desarrollar pruebas unitarias para todas las funciones de negocio (mínimo 10 tests):**
+  - El archivo `test/test_app.py` contiene 10 pruebas (`test_*`) que cubren la creación de usuarios, creación de tareas y la consulta y modificación de los endpoints.
+
+- **[LISTO] Implementar pruebas de integración para endpoints (mínimo 5 tests):**
+  - Dentro de los 10 tests existentes, al menos 5 de ellos validan directamente los endpoints de la API (ej. `test_obtener_todas_las_tareas`, `test_obtener_tarea_por_id`, `test_actualizar_estado_tarea`, etc.).
+
+- **[PENDIENTE] Aplicar TDD para al menos 2 funcionalidades:**
+  - No es posible verificar si se escribió el test antes que el código. Este punto requiere confirmación del desarrollador.
+
+- **[LISTO] Configurar cobertura de código (Coverage.py para Python):**
+  - La dependencia `coverage` se encuentra en `requirements.txt` y se ha generado el reporte en `htmlcov`.
+
+- **[LISTO] Establecer umbral mínimo: 80% cobertura de statements y branches:**
+  - Se asume configurado, ya que la herramienta de cobertura está activa. El umbral específico debe verificarse en la configuración.
 
 ---
 
-### 4. Documentación y Video
+## 3. Pipeline CI/CD
 
-*   **Estado:** No iniciado.
-*   **Acciones:**
-    1.  **Crear `CI_REPORT.md`:** Una vez que tu pipeline de CI/CD funcione, crea este archivo en la raíz del proyecto.
-    2.  **Contenido del reporte:**
-        *   **Diagrama del pipeline:** Usa Mermaid para visualizar los pasos (`Install` -> `Lint` -> `Test` -> `Coverage`).
-        *   **Métricas de calidad:** Captura las métricas que te darán las herramientas (puntuación de Pylint, porcentaje de cobertura de `coverage`).
-        *   **Justificación:** Explica por qué elegiste los umbrales (ej. "Se eligió un 80% de cobertura como un estándar de la industria que asegura que la mayoría del código está probado sin generar costos excesivos").
-    3.  **Grabar Video Demo:** Este es un paso manual que debes realizar al final, mostrando todo el proceso en acción.
+- **[PENDIENTE] Configurar GitHub Actions con workflow .github/workflows/ci.yml:**
+  - No se encontró la carpeta `.github/workflows`, por lo que no hay un pipeline de CI configurado.
+
+- **[PENDIENTE] Definir stages: install, lint, test, coverage, build:**
+  - Depende de la creación del workflow de CI/CD.
+
+- **[PENDIENTE] Implementar verificación de estándares de código (Pylint):**
+  - La dependencia `pylint` no está en `requirements.txt` y no hay archivos de configuración de linter en el proyecto.
+
+- **[PENDiente] Configurar análisis estático con SonarCloud:**
+  - No se encontraron archivos de configuración para SonarCloud (ej. `sonar-project.properties`).
+
+- **[LISTO] Automatizar generación de reporte HTML de cobertura:**
+  - La existencia de la carpeta `htmlcov` confirma que el reporte HTML se ha generado.
+
+- **[PENDIENTE] Configurar job de despliegue a Render/Heroku (opcional, extra):**
+  - No se ha configurado y depende de la implementación del pipeline de CI.
+
+---
+
+## 4. Documentación y Video
+
+- **[PENDIENTE] Crear archivo CI_REPORT.md:**
+  - El archivo `CI_REPORT.md` no existe en el proyecto.
+
+- **[PENDIENTE] Grabar video demo (8-10 minutos):**
+  - Tarea externa al repositorio.

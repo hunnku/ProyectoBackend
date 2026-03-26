@@ -13,8 +13,6 @@ class TestUsuariosAPI(unittest.TestCase):
         to_do_list.clear()
     
 
-    
-        
     def test_crear_usuario_exitoso(self):
         datos_enviados = {
             "nombre": "Mario Mendoza",
@@ -34,7 +32,6 @@ class TestUsuariosAPI(unittest.TestCase):
         self.assertEqual(datos_respuesta['nombre'], "Mario Mendoza")
         self.assertEqual(datos_respuesta['estado'], "activo")
 
-
     def test_crear_usuario_falta_email(self):
         datos_enviados = {
             "nombre": "Laura Gomez"
@@ -47,7 +44,6 @@ class TestUsuariosAPI(unittest.TestCase):
         
         self.assertEqual(respuesta.status_code, 400)
         self.assertEqual(len(usuarios), 0)
-
 
     def test_crear_nueva_tarea(self):
         usuarios.append({"id": 1, "nombre": "Miguel", "email": "miguel@test.com"})
@@ -69,7 +65,6 @@ class TestUsuariosAPI(unittest.TestCase):
         self.assertEqual(datos_respuesta_tarea['titulo'], "Grooming Profesional")
         self.assertEqual(datos_respuesta_tarea['id_usuario'], 1)
 
-
     def test_obtener_todas_las_tareas(self):
         to_do_list.extend([
             {"id": 1, "titulo": "Baño Premium", "estado": "pendiente", "fecha": "2026-03-30 10:00:00", "id_usuario": 1, "fecha_creacion": "2026-03-25 09:00:00"},
@@ -86,8 +81,7 @@ class TestUsuariosAPI(unittest.TestCase):
         self.assertEqual(respuesta.status_code, 200)
         datos_respuesta = respuesta.get_json()
         self.assertEqual(len(datos_respuesta), 5)
-        
-        
+           
     def test_obtener_tarea_por_id(self):
         to_do_list.extend([
             {"id": 1, "titulo": "Baño Premium", "estado": "pendiente", "fecha": "2026-03-30 10:00:00", "id_usuario": 1, "fecha_creacion": "2026-03-25 09:00:00"},
@@ -108,7 +102,6 @@ class TestUsuariosAPI(unittest.TestCase):
         self.assertEqual(respuesta.status_code, 200)
         self.assertEqual(json_respuesta['id'], 3)
         self.assertCountEqual(llaves_json_respuesta.keys(), llaves_esperadas)
-
 
     def test_tarea_por_id_inexistente(self):
         to_do_list.extend([
@@ -139,8 +132,7 @@ class TestUsuariosAPI(unittest.TestCase):
         
         self.assertEqual(respuesta.status_code, 400)
         self.assertEqual(json_respuesta['error'], "El usuario no existe")
-        
-    
+           
     def test_actualizar_estado_tarea(self):
         to_do_list.append({"id": 4, "titulo": "Grooming Profesional", "estado": "pendiente", "fecha": "2026-10-30 15:00:00", "id_usuario": 1, "fecha_creacion": "2026-09-28 09:00:00"})  
 
@@ -154,7 +146,6 @@ class TestUsuariosAPI(unittest.TestCase):
         
         self.assertEqual(respuesta.status_code, 200)
         self.assertEqual(json_respuesta['mensaje'], "Estado actualizado correctamente")
-
 
     def test_actualizar_estado_tarea_cancelado(self):
         to_do_list.append({"id": 2, "titulo": "Baño Premium", "estado": "cancelado", "fecha": "2026-03-30 09:00:00", "id_usuario": 2, "fecha_creacion": "2026-03-30 08:00:00"})  
@@ -180,6 +171,72 @@ class TestUsuariosAPI(unittest.TestCase):
         self.assertEqual(respuesta.status_code, 200)
         self.assertEqual(json_respuesta['mensaje'], "Tarea 1 eliminada correctamente")
         
+    def test_lista_tareas_usuario(self):
+        to_do_list.append({"id": 1, "titulo": "Baño Premium", "estado": "pendiente", "fecha": "2026-03-30 10:00:00", "id_usuario": 1, "fecha_creacion": "2026-03-25 09:00:00"})
         
+        respuesta = self.app.get('/api/to_do/cliente/1')  
+        
+        json_respuesta = json.loads(respuesta.data)
+        
+        self.assertEqual(respuesta.status_code, 200)
+        self.assertEqual(json_respuesta['id_usuario'], 1)
+        
+    def test_lista_tareas_usuario_error(self):
+        to_do_list.append({"id": 1, "titulo": "Baño Premium", "estado": "pendiente", "fecha": "2026-03-30 10:00:00", "id_usuario": 1, "fecha_creacion": "2026-03-25 09:00:00"})
+        
+        respuesta = self.app.get('/api/to_do/cliente/2')  
+        
+        json_respuesta = json.loads(respuesta.data)
+        
+        self.assertEqual(respuesta.status_code, 404)
+        self.assertEqual(json_respuesta['error'], "Usuario 2 no encontrado")   
+        
+    def test_lista_tarea_titulo(self):
+        to_do_list.append({"id": 1, "titulo": "Baño Premium", "estado": "pendiente", "fecha": "2026-03-30 10:00:00", "id_usuario": 1, "fecha_creacion": "2026-03-25 09:00:00"})
+        
+        respuesta = self.app.get('/api/to_do/titulo/Baño Premium')
+        
+        json_respuesta = json.loads(respuesta.data)
+        
+        self.assertEqual(respuesta.status_code, 200)
+        self.assertEqual(json_respuesta['titulo'], "Baño Premium")                    
+        
+    def test_lista_tarea_titulo_error(self):
+        to_do_list.append({"id": 1, "titulo": "Baño Premium", "estado": "pendiente", "fecha": "2026-03-30 10:00:00", "id_usuario": 1, "fecha_creacion": "2026-03-25 09:00:00"})
+        
+        respuesta = self.app.get('/api/to_do/titulo/Baño Perro')
+        
+        json_respuesta = json.loads(respuesta.data)
+        
+        self.assertEqual(respuesta.status_code, 404)
+        self.assertEqual(json_respuesta['error'], "Tarea Baño Perro no encontrada")           
+
+    def test_lista_tarea_estado(self):
+        to_do_list.append({"id": 1, "titulo": "Baño Premium", "estado": "pendiente", "fecha": "2026-03-30 10:00:00", "id_usuario": 1, "fecha_creacion": "2026-03-25 09:00:00"})
+                
+        respuesta = self.app.get('/api/to_do/estado/pendiente')
+        
+        json_respuesta = json.loads(respuesta.data)
+        
+        self.assertEqual(respuesta.status_code, 200)
+        self.assertEqual(json_respuesta['estado'], "pendiente")  
+
+
+    def test_listado_usuario(self):
+        to_do_list.extend([
+            {"id": 1, "titulo": "Baño Premium", "estado": "pendiente", "fecha": "2026-03-30 10:00:00", "id_usuario": 1, "fecha_creacion": "2026-03-25 09:00:00"},
+            {"id": 2, "titulo": "Baño Premium", "estado": "cancelado", "fecha": "2026-03-30 09:00:00", "id_usuario": 2, "fecha_creacion": "2026-03-30 08:00:00"},
+            {"id": 3, "titulo": "Grooming Profesional", "estado": "completado", "fecha": "2026-03-30 13:00:00", "id_usuario": 2, "fecha_creacion": "2026-03-27 09:00:00"},
+            {"id": 4, "titulo": "Grooming Profesional", "estado": "pendiente", "fecha": "2026-10-30 15:00:00", "id_usuario": 1, "fecha_creacion": "2026-09-28 09:00:00"},
+            {"id": 5, "titulo": "Grooming Profesional", "estado": "completado", "fecha": "2026-10-30 12:00:00", "id_usuario": 3, "fecha_creacion": "2026-09-29 09:00:00"}
+        ])
+        
+        respuesta = self.app.get('/api/usuario_id/1')
+        
+        json_respuesta = json.loads(respuesta.data)
+        
+        self.assertEqual(respuesta.status_code, 200)
+        self.assertEqual(json_respuesta['id'], 1)  
+
 if __name__ == '__main__':
     unittest.main()
