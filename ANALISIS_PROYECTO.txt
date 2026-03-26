@@ -41,11 +41,11 @@ A continuación se detalla el estado de cada uno de los puntos solicitados, basa
 
 ## 3. Pipeline CI/CD
 
-- **[PENDIENTE] Configurar GitHub Actions con workflow .github/workflows/ci.yml:**
-  - No se encontró la carpeta `.github/workflows`, por lo que no hay un pipeline de CI configurado.
+- **[LISTO] Configurar GitHub Actions con workflow .github/workflows/ci.yml:**
+  - Se ha creado el workflow en `.github/workflows/ci.yml` y se ha confirmado en el repositorio.
 
-- **[PENDIENTE] Definir stages: install, lint, test, coverage, build:**
-  - Depende de la creación del workflow de CI/CD.
+- **[LISTO] Definir stages: install, test, coverage:**
+  - El workflow define los pasos para instalar dependencias, ejecutar pruebas (`unittest`) y generar un reporte de cobertura. Los stages de `lint` y `build` no se incluyeron explícitamente.
 
 - **[PENDIENTE] Implementar verificación de estándares de código (Pylint):**
   - La dependencia `pylint` no está en `requirements.txt` y no hay archivos de configuración de linter en el proyecto.
