@@ -37,3 +37,17 @@ jobs:
       with:
         name: reporte-de-cobertura
         path: htmlcov
+
+    - name: SonarCloud Scan
+      uses: SonarSource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Lo da GitHub solo
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - name: Desplegar a Render
+        run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}

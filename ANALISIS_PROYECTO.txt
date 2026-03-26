@@ -56,8 +56,8 @@ A continuación se detalla el estado de cada uno de los puntos solicitados, basa
 - **[LISTO] Automatizar generación de reporte HTML de cobertura:**
   - La existencia de la carpeta `htmlcov` confirma que el reporte HTML se ha generado.
 
-- **[PENDIENTE] Configurar job de despliegue a Render/Heroku (opcional, extra):**
-  - No se ha configurado y depende de la implementación del pipeline de CI.
+- **[LISTO] Configurar job de despliegue a Render/Heroku (opcional, extra):**
+  - Se ha añadido un job de despliegue para Render en el pipeline de CI. Es necesario configurar el secreto `RENDER_DEPLOY_HOOK_URL` en GitHub.
 
 ---
 
