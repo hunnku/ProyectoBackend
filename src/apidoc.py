@@ -4,6 +4,8 @@ from flask.views import MethodView
 from flask_smorest import Api, Blueprint, abort
 from marshmallow import Schema, fields, validate
 
+# Link http://127.0.0.1:5001/swagger-ui
+
 # --- Configuración de la Aplicación ---
 app = Flask(__name__)
 app.json.ensure_ascii = False
@@ -42,7 +44,7 @@ class UserSchema(Schema):
     id = fields.Int(dump_only=True)
     nombre = fields.Str(required=True)
     email = fields.Email(required=True)
-    estado = fields.Str(dump_only=True, description="Estado del usuario, por defecto 'activo' al crear.")
+    estado = fields.Str(dump_only=True, metadata={"description": "Estado del usuario, por defecto 'activo' al crear."})
 
 class UserUpdateSchema(Schema):
     nombre = fields.Str()
@@ -52,10 +54,10 @@ class UserUpdateSchema(Schema):
 class TaskSchema(Schema):
     id = fields.Int(dump_only=True)
     titulo = fields.Str(required=True, validate=validate.OneOf(titulos_disponibles))
-    estado = fields.Str(dump_only=True, description="Estado de la tarea, se asigna 'pendiente' automáticamente.")
-    fecha = fields.Str(required=True, description="Fecha de ejecución de la tarea (formato: YYYY-MM-DD HH:MM:SS).")
+    estado = fields.Str(dump_only=True, metadata={"description": "Estado de la tarea, se asigna 'pendiente' automáticamente."})
+    fecha = fields.Str(required=True, metadata={"description": "Fecha de ejecución de la tarea (formato: YYYY-MM-DD HH:MM:SS)."})
     id_usuario = fields.Int(required=True)
-    fecha_creacion = fields.Str(dump_only=True, description="Fecha de creación automática.")
+    fecha_creacion = fields.Str(dump_only=True, metadata={"description": "Fecha de creación automática."})
 
 class TaskUpdateSchema(Schema):
     estado = fields.Str(required=True, validate=validate.OneOf(["completado", "cancelado"]))
