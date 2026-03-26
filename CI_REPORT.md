@@ -4,13 +4,11 @@ Este documento detalla la configuración y el estado del pipeline de Integració
 
 ## 1. Estado del Pipeline
 
-[![Estado del Workflow de CI/CD](https://github.com/USUARIO/REPOSITORIO/actions/workflows/ci.yml/badge.svg)](https://github.com/USUARIO/REPOSITORIO/actions/workflows/ci.yml)
-
-**Nota:** Reemplaza `USUARIO` y `REPOSITORIO` con tu nombre de usuario y el nombre del repositorio de GitHub para activar el badge de estado.
+[![Estado del Workflow de CI/CD](https://github.com/hunnku/ProyectoBackend/actions/workflows/ci.yml/badge.svg)](https://github.com/hunnku/ProyectoBackend/actions/workflows/ci.yml)
 
 ## 2. Descripción del Workflow
 
-El pipeline de CI/CD está definido en el archivo `.github/workflows/ci.yml` y se ejecuta en cada `push` y `pull_request` a la rama `main`.
+El pipeline de CI/CD está definido en el archivo `.github/workflows/ci.yml` y se ejecuta en cada `push` y `pull_request` a la rama `master`.
 
 ### Jobs del Pipeline
 
